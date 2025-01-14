@@ -52,7 +52,7 @@
         </div>
 
         <p class="text-gray-600 mt-2">
-          Date order:
+          <strong>Date order:</strong>
           {{
             new Intl.DateTimeFormat("en-PH", {
               year: "numeric",
@@ -61,7 +61,9 @@
             }).format(new Date(order.order_date))
           }}
         </p>
-        <p class="text-gray-600">Total: {{ order.grand_price }}</p>
+        <p class="text-gray-600">
+          <strong>Total:</strong> {{ order.grand_price }}
+        </p>
         <div>
           <Accordion :order="order" />
         </div>

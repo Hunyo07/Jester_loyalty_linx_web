@@ -203,7 +203,7 @@ const getAllMerchant = async (token) => {
     if (response.ok) {
       const data = await response.json();
       merchantData.value = data.merchants;
-      console.log(merchantData.value);
+      // console.log(merchantData.value);
       localStorage.setItem("m_data", JSON.stringify(data.merchants));
     } else {
       const data = await response.json();

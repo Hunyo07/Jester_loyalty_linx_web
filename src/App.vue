@@ -3,10 +3,39 @@ import Landing from "./views/LandingView.vue";
 import login from "./views/auth/LoginView.vue";
 import register from "./views/auth/RegisterView.vue";
 import { RouterView } from "vue-router";
+import { ref, onMounted } from "vue";
+const urlProfile = "http://localhost:5000/api/user/profile";
+const token = localStorage.getItem("a_TOK");
+
+const getUserProfile = async (token) => {
+  try {
+    const response = await fetch(urlProfile, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await response.json();
+    if (response.ok) {
+      localStorage.setItem("u_data", JSON.stringify(data.userProfile));
+    } else {
+      error.value = "Error fetching user profile";
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+onMounted(() => {
+  if (token) {
+    getUserProfile(token);
+  }
+});
 </script>
 
 <template>
   <!-- <Landing msg="Loyaly Linx" /> -->
+
   <RouterView />
 </template>
 

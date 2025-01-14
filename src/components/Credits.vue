@@ -22,19 +22,18 @@ let merchantData = ref([]);
 let isMerchantDataFetched = ref(false); // Flag to track whether merchant data has been fetched
 const userProfile = ref([]);
 const creditsBalance = ref("");
-const creditsReq = ref("");
 const limit = ref("");
 const newLimit = ref(0);
 const used = ref("");
-
 userProfile.value = JSON.parse(localStorage.getItem("u_data"));
+
+const creditsData = ref([]);
+creditsData.value = userProfile.value.creditRequests;
 getCookieUserProfileAsync("u_PRO");
-// getCookieUserCredsAsync("userCred");
-getCookieUserCredReqsAsync("u_CREDREQ");
+
 const token = localStorage.getItem("a_TOK");
 onMounted(async () => {
   const userStore = useUserStore();
-
   used.value = userProfile.value.creditsBalance;
   creditsBalance.value = userProfile.value.creditsBalance;
   sessionStorage.setItem("u_CRDBAl", JSON.stringify(userProfile.value.balance));
@@ -73,26 +72,6 @@ async function getCookieUserProfileAsync(name) {
   }
 }
 
-async function getCookieUserCredReqsAsync(name) {
-  try {
-    const cookieValue = await getCookieAsync(name);
-    if (cookieValue) {
-      creditsReq.value = JSON.parse(decodeURIComponent(cookieValue));
-      sessionStorage.setItem(
-        "u_CRDRQ",
-        JSON.stringify(JSON.parse(decodeURIComponent(cookieValue)))
-      );
-      // console.log(JSON.parse(decodeURIComponent(cookieValue)));
-
-      console.log();
-    } else {
-      // console.log("userProfile cookie not found");
-    }
-  } catch (error) {
-    console.error("Error getting token cookie:", error);
-  }
-}
-
 const getAllMerchant = async () => {
   try {
     const response = await fetch(merchantEndPoint, {
@@ -121,7 +100,7 @@ const balances = ref([
   {
     balanceItems: [
       {
-        label: "Available balance",
+        label: "Total Loan",
         value: newLimit,
         id: 1,
         progress: true,
@@ -264,6 +243,7 @@ const hideModal = () => {
         :key="index"
         :item="balanceItem"
         :index="index"
+        :credits="creditsData"
       />
     </ul>
   </template>

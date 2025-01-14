@@ -1,5 +1,7 @@
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
+import Filter from "../FilterComponent/Filter.vue";
+
 const props = defineProps(["data", "index"]);
 </script>
 
@@ -50,7 +52,17 @@ const props = defineProps(["data", "index"]);
       <div
         class="flex flex-2 items-center justify-center text-center p-2.5 xl:p-5"
       >
-        <p class="text-black dark:text-white">+{{ data.amount }}</p>
+        <p
+          :class="{
+            'text-red': data.transactionType.toLowerCase() === 'substract',
+            'text-green-500':
+              data.transactionType.toLowerCase() === 'credit_applied' ||
+              'points add',
+          }"
+        >
+          {{ data.transactionType.toLowerCase() != "substract" ? "+" : "-" }}
+        </p>
+        <p class="text-black dark:text-white">{{ data.amount }}</p>
       </div>
     </div>
   </div>
