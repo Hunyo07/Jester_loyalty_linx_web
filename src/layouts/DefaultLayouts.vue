@@ -8,7 +8,7 @@ import BottomNavigation from "../components/NavBar/BottomNavigation.vue";
   <div>
     <!-- Content Wrapper Start -->
     <div>
-      <div class="flex bg-white flex-1 flex-col">
+      <div class="flex flex-1 flex-col bg-white">
         <!-- Header Start -->
         <NavbarArea />
         <!-- Header End -->
@@ -16,7 +16,7 @@ import BottomNavigation from "../components/NavBar/BottomNavigation.vue";
 
       <!-- Main Content Start -->
       <main>
-        <div class="">
+        <div class="bg-white">
           <div class="mx-auto">
             <slot></slot>
           </div>

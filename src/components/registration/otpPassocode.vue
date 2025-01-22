@@ -113,7 +113,7 @@ input:focus {
   outline: none;
   box-shadow: none;
   border: none;
-  border-bottom: 1px solid #ffa000;
+  border-bottom: 1px solid #4635b1;
   /* caret-color: transparent; */
 }
 .bounce {

@@ -1,8 +1,10 @@
 <script setup>
 import { ref, onMounted } from "vue";
+import { initCollapses } from "flowbite";
 import { initCarousels } from "flowbite";
 
 const theme = ref(null);
+
 onMounted(() => {
   initCarousels();
 
@@ -23,7 +25,7 @@ const carouselImages = ref([
       },
       {
         name: "image2",
-        path: "https://as2.ftcdn.net/v2/jpg/02/48/39/75/1000_F_248397538_OsyBnjShqT7IRsCRIgVSkq5dSWbwRN0g.jpg",
+        path: "https://c8.alamy.com/comp/2AKGW7J/grocery-shopping-promotional-sale-advertisement-fast-shopping-cart-full-of-fresh-colorful-food-2AKGW7J.jpg",
       },
       {
         name: "image3",
@@ -48,13 +50,13 @@ const activeIndex = ref(0);
       class="font-bold text-lg text-[#4635B1]"
       :style="{ color: theme?.textColor || '#1b1b1c' }"
     >
-      Whats new?
+      Be one of us!
     </h2>
     <p
       class="text-[.8rem] md:text-[.9rem] text-[#4635B1] font-semibold"
       :style="{ color: theme?.textColor || '#1b1b1c' }"
     >
-      Experience and join our exciting updates!
+      Heres our new offers explore!!
     </p>
     <div class="h-px w-full bg-slate-200"></div>
   </div>

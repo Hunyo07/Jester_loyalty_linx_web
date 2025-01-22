@@ -1,8 +1,7 @@
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 
 const props = defineProps(["item", "index", "credits"]);
-console.log(props.credits);
 const progressBarWidth = computed(() => {
   if (!props.item.value) return 0;
   return `${(props.item.used / props.item.max) * 100}%`;
@@ -13,7 +12,6 @@ const formattedMaxAmount = computed(() => {
     minimumFractionDigits: 2,
   }).format(props.item.max);
 });
-console.log(props.item);
 
 const formattedUsed = computed(() => {
   return new Intl.NumberFormat("en-PH", {
@@ -34,22 +32,27 @@ const showDetails = ref(false);
 const toggleDetails = () => {
   showDetails.value = !showDetails.value;
 };
+const theme = ref(null);
+const storedTheme = localStorage.getItem("theme");
+theme.value = JSON.parse(storedTheme);
 </script>
 
 <template>
-  <div class="w-full justify-center items-center flex flex-col rounded-md">
+  <div class="w-full justify-center items-center flex flex-col">
     <li
-      class="block w-[90%] p-5 my-2 rounded-3xl bg-gradient-to-r from-amber-400 to-amber-600 border border-gray-200 shadow dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
+      class="block w-[90%] p-5 my-2 rounded-lg bg-[#3D3BF3] shadow dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
+      :style="{ backgroundColor: theme?.backgroundColor || '#3D3BF3' }"
     >
       <div class="flex flex-col">
         <h5
-          class="mb-2 underline underline-offset-4 text-center text-4xl font-bold tracking-tight text-amber-800 dark:text-white"
+          class="mb-2 underline underline-offset-4 text-center text-4xl font-bold tracking-tight text-[#EBEAFF] dark:text-white"
+          :style="{ color: theme?.primary || '#EBEAFF' }"
         >
           {{ formattedCreditAmount }}
         </h5>
         <div>
           <p
-            class="font-medium text-center font-semibold py-2 text-sm text-gray-700 dark:text-gray-400"
+            class="text-center font-semibold py-2 text-sm text-gray-200 dark:text-gray-400"
           >
             {{ item.label }}
           </p>
@@ -58,15 +61,18 @@ const toggleDetails = () => {
       <div v-if="item.progress">
         <div class="bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
           <div
-            class="bg-amber-600 h-2.5 rounded-full"
-            :style="{ width: progressBarWidth }"
+            class="bg-[#9694FF] h-2.5 rounded-full"
+            :style="{
+              width: progressBarWidth,
+              backgroundColor: theme?.secondaryColor || '#42414215',
+            }"
           ></div>
         </div>
         <div class="flex justify-between">
-          <h1 class="text-gray-700 text-sm mt-2 font-semibold">
+          <h1 class="text-gray-200 text-sm mt-2 font-semibold">
             {{ formattedUsed }} Used
           </h1>
-          <h1 class="text-gray-700 text-sm mt-2 font-semibold">
+          <h1 class="text-gray-200 text-sm mt-2 font-semibold">
             {{ formattedMaxAmount }} Limit
           </h1>
         </div>
@@ -74,7 +80,8 @@ const toggleDetails = () => {
       <div v-if="item.progress">
         <button
           @click="toggleDetails"
-          class="mt-3 w-full py-2 text-sm font-semibold text-white bg-amber-500 rounded-lg hover:bg-amber-600 focus:outline-none focus:ring focus:ring-amber-300"
+          class="mt-3 w-full py-2 text-sm font-semibold text-white bg-[#9694FF] rounded-sm hover:bg-[#9a98fc] focus:outline-none"
+          :style="{ backgroundColor: theme?.secondaryColor || '#9694FF' }"
         >
           {{ showDetails ? "Hide Details" : "View Details" }}
         </button>

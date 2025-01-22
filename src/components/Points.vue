@@ -3,9 +3,10 @@ import { ref } from "vue";
 import PointsCard from "../components/PointsCard/PointsCard.vue";
 import PointsHistory from "./PointsCard/PointsHistory.vue";
 import Services from "./HomeCard/Services.vue";
-import ConvertPath from "../assets/img/points/bitcoin-convert-svgrepo-com.svg";
-import RedeemPath from "../assets/img/points/to-receive-points-svgrepo-com.svg";
-import ShopPath from "../assets/img/points/shop-2-svgrepo-com.svg";
+import ConvertPath from "../assets/img/credits/convert.svg";
+import RedeemPath from "../assets/img/credits/redeem.svg";
+import ShopPath from "../assets/img/credits/shop.svg";
+import History from "../assets/img/credits/history.svg";
 import { useRouter } from "vue-router";
 
 const props = defineProps(["item", "index"]);
@@ -41,6 +42,11 @@ const servicesItem = ref([
     id: 3,
     name: "Shop",
     path: ShopPath,
+  },
+  {
+    id: 4,
+    name: "History",
+    path: History,
   },
 ]);
 

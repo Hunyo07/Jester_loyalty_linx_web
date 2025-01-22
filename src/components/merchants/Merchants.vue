@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import ModalMerchants from "../Credits/ApplicationForm.vue";
 import Swal from "sweetalert2";
 import { useRouter } from "vue-router";
@@ -52,11 +52,20 @@ const unHideModal = (merchantGroup) => {
   //   });
   // }
 };
+const theme = ref(null);
+if (localStorage.getItem("theme")) {
+  theme.value = JSON.parse(localStorage.getItem("theme"));
+}
 </script>
 <template>
   <div class="bg-white mx-3 py-2">
     <div class="p-4">
-      <h2 class="font-bold font-md m-1">Merchants</h2>
+      <h2
+        class="font-bold font-md text-[#4635B1] m-1"
+        :style="{ color: theme?.textColor || '#1b1b1c' }"
+      >
+        Merchants
+      </h2>
       <div class="h-px w-full bg-slate-200"></div>
     </div>
     <div class="grid grid-cols-3 gap-3 mx-auto px-5 max-w-100">
@@ -72,7 +81,11 @@ const unHideModal = (merchantGroup) => {
             :src="merchantGroup.profilePicture"
             alt=""
           />
-          <p id="name" class="font-semibold text-sm text-gray-700">
+          <p
+            id="name"
+            class="font-semibold text-sm text-[#4635B1]"
+            :style="{ color: theme?.textColor || '#1b1b1c' }"
+          >
             {{ merchantGroup.storeName }}
           </p>
         </div>

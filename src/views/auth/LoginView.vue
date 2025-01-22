@@ -169,7 +169,7 @@ const validateMobileNo = () => {
               />
               <span
                 style="font-family: poppins"
-                class="text-amber-700 self-center text-3xl font-extrabold whitespace-nowrap dark:text-white"
+                class="text-red self-center text-3xl font-extrabold whitespace-nowrap dark:text-white"
                 >Loyalty Linx</span
               >
             </div>
@@ -327,7 +327,7 @@ const validateMobileNo = () => {
               <!-- <router-link to="/home"> -->
               <button
                 type="submit"
-                class="w-full shadow-xl py-3 px-4 text-sm tracking-wide rounded-lg text-white bg-amber-500 hover:bg-amber-600 focus:outline-none"
+                class="w-full shadow-xl py-3 px-4 text-sm tracking-wide rounded-lg text-white bg-red hover:bg-rose-700 focus:outline-none"
               >
                 Submit
               </button>

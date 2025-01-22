@@ -5,7 +5,10 @@ import register from "./views/auth/RegisterView.vue";
 import { RouterView } from "vue-router";
 import { ref, onMounted } from "vue";
 const urlProfile = "http://localhost:5000/api/user/profile";
+const themeUrl =
+  "http://localhost:5000/api/theme/themes/6790dbb1af2b5674bae2f108";
 const token = localStorage.getItem("a_TOK");
+const data = ref(null);
 
 const getUserProfile = async (token) => {
   try {
@@ -26,8 +29,19 @@ const getUserProfile = async (token) => {
     console.log(error);
   }
 };
+const getTheme = async (token) => {
+  try {
+    const response = await fetch(themeUrl);
+    const themeData = await response.json(); // Replace with your API endpoint
+    data.value = themeData;
+    localStorage.setItem("theme", JSON.stringify(themeData));
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
 onMounted(() => {
   if (token) {
+    getTheme();
     getUserProfile(token);
   }
 });

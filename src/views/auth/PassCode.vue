@@ -326,7 +326,7 @@ const handleSignIn = async () => {
               <p
                 @click="generateOtpTokens"
                 href="jajvascript:void(0);"
-                class="text-amber-500 hover:underline font-semibold cursor-pointer"
+                class="text-[#4635B1] hover:underline font-semibold cursor-pointer"
               >
                 Forgot your passcode?
               </p>
@@ -339,7 +339,7 @@ const handleSignIn = async () => {
               <button
                 @click="createPassCode"
                 type="submit"
-                class="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-sm text-white bg-amber-600 hover:bg-amber-500 focus:outline-none focus:border-amber-700 focus:shadow-outline-indigo active:bg-amber-700 transition duration-150 ease-in-out"
+                class="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-sm text-white bg-[#3D3BF3] hover:bg-[#4635B1] focus:outline-none focus:border-[#4635B1] focus:shadow-outline-indigo active:bg-[#4635B1] transition duration-150 ease-in-out"
               >
                 Next
               </button>

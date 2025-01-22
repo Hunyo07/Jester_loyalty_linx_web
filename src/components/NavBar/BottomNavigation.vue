@@ -1,8 +1,28 @@
-<script setup></script>
+<script setup>
+import { ref, onMounted } from "vue";
+
+const theme = ref(null);
+
+if (localStorage.getItem("theme")) {
+  theme.value = JSON.parse(localStorage.getItem("theme"));
+}
+// const backGround = theme.value.backgroundColor;
+const updateBackgroundColor = () => {
+  if (theme.value && theme.value.backgroundColor) {
+    document.documentElement.style.setProperty(
+      "--background-color",
+      theme.value.backgroundColor
+    );
+  }
+};
+onMounted(() => {
+  updateBackgroundColor();
+});
+</script>
 
 <template>
   <div
-    class="fixed z-40 w-full h-16 max-w-lg -translate-x-1/2 bg-white rounded-full bottom-4 left-1/2 dark:bg-gray-700 dark:border-gray-600"
+    class="fixed z-40 w-full h-16 max-w-lg -translate-x-1/2 bg-white rounded-full bottom-1 left-1/2 dark:bg-gray-700 dark:border-gray-600"
   >
     <div class="grid h-full max-w-lg grid-cols-5 mx-auto">
       <router-link
@@ -55,7 +75,7 @@
             to="/qr"
             :class="{ 'active-page': $route.name === 'qr' }"
             type="button"
-            class="p-2 inline-flex items-center justify-center w-10 h-10 font-medium bg-amber-600 rounded-full hover:bg-amber-700 group focus:ring-4 focus:ring-gray-100 focus:outline-none dark:focus:ring-blue-800"
+            class="p-2 inline-flex items-center justify-center w-10 h-10 font-medium bg-[var(--background-color)] rounded-full hover:bg-amber-700 group focus:ring-4 focus:ring-gray-100 focus:outline-none dark:focus:ring-blue-800"
           >
             <svg
               class="w-[2rem] h-[rem]"
@@ -183,10 +203,21 @@
   </div>
 </template>
 <style>
+:root {
+  --background-color: #ffffff; /* Default background color */
+}
+/* .active-page svg {
+  fill: backGround; 
+} */
+/* Change the fill color to your desired color */
+/* .active-page svg path {
+  fill: backGround; 
+} */
+/* Change the fill color to your desired blue color */
 .active-page svg {
-  fill: #e5641e; /* Change the fill color to your desired color */
+  fill: var(--background-color); /* Use the CSS variable */
 }
 .active-page svg path {
-  fill: #e5641e; /* Change the fill color to your desired blue color */
+  fill: var(--background-color); /* Use the CSS variable */
 }
 </style>

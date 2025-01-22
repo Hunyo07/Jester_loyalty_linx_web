@@ -3,9 +3,11 @@ import { ref, onMounted, computed } from "vue";
 import PointsCard from "./PointsCard/PointsCard.vue";
 import PointsHistory from "./PointsCard/PointsHistory.vue";
 import Services from "./HomeCard/Services.vue";
-import ApplyCreditPath from "../assets/img/credits/invoice-apply-line-svgrepo-com.svg";
-import PayCreditsPath from "../assets/img/credits/pay-pal-paypal-payments-platform-svgrepo-com.svg";
-import StatusIcon from "../assets/img/credits/status-up-svgrepo-com.svg";
+// import ApplyCreditPath from "../assets/img/credits/invoice-apply-line-svgrepo-com.svg";
+import ApplyCreditPath from "../assets/img/credits/download.svg";
+import PayCreditsPath from "../assets/img/credits/payment-icon.svg";
+import History from "../assets/img/credits/history.svg";
+import StatusIcon from "../assets/img/credits/loan-status.svg";
 import jollibee from "../assets/img/merchants/jollibee.png";
 import mcdo from "../assets/img/merchants/mcdo.png";
 import amazon from "../assets/img/merchants/amazon.png";
@@ -100,7 +102,7 @@ const balances = ref([
   {
     balanceItems: [
       {
-        label: "Total Loan",
+        label: "Available balance",
         value: newLimit,
         id: 1,
         progress: true,
@@ -163,6 +165,11 @@ const servicesItem = ref([
     id: 3,
     name: "Loan Status",
     path: StatusIcon,
+  },
+  {
+    id: 4,
+    name: "History",
+    path: History,
   },
 ]);
 

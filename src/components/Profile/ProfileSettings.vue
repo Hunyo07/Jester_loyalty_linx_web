@@ -4,6 +4,11 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 const props = defineProps(["item"]);
 
+const theme = ref(null);
+if (localStorage.getItem("theme")) {
+  theme.value = JSON.parse(localStorage.getItem("theme"));
+}
+
 const handleVerification = () => {
   router.replace({ name: "choose/id" });
 };
@@ -158,7 +163,8 @@ const signOut = () => {
         <div class="absolute bottom-1 right-1 z-10 xsm:bottom-4 xsm:right-4">
           <label
             for="cover"
-            class="flex cursor-pointer items-center justify-center gap-2 rounded bg-amber-600 py-1 px-2 text-sm font-medium text-white hover:bg-opacity-80 xsm:px-4"
+            class="flex cursor-pointer items-center justify-center gap-2 rounded bg-[#3D3BF3] py-1 px-2 text-sm font-medium text-white hover:bg-opacity-80 xsm:px-4"
+            :style="{ backgroundColor: theme?.backgroundColor || '#3D3BF3' }"
           >
             <input type="file" name="cover" id="cover" class="sr-only" />
             <span>
@@ -200,7 +206,8 @@ const signOut = () => {
             />
             <label
               for="profile"
-              class="absolute bottom-0 right-0 flex h-8.5 w-8.5 cursor-pointer items-center justify-center rounded-full bg-amber-600 text-white hover:bg-opacity-90 sm:bottom-2 sm:right-2"
+              class="absolute bottom-0 right-0 flex h-8.5 w-8.5 cursor-pointer items-center justify-center rounded-full bg-[#3D3BF3] text-white hover:bg-opacity-90 sm:bottom-2 sm:right-2"
+              :style="{ backgroundColor: theme?.backgroundColor || '#3D3BF2' }"
             >
               <svg
                 class="fill-current"

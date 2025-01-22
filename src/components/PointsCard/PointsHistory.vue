@@ -2,6 +2,12 @@
 import { ref } from "vue";
 import Pointstable from "../tables/Table.vue";
 const props = defineProps(["brands"]);
+
+const theme = ref(null);
+
+if (localStorage.getItem("theme")) {
+  theme.value = JSON.parse(localStorage.getItem("theme"));
+}
 </script>
 
 <template>
@@ -11,8 +17,13 @@ const props = defineProps(["brands"]);
         class="h-[30rem] rounded-lg pb-2.5 dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1"
       >
         <div class="px-4 mb-4">
-          <h2 class="font-bold font-md m-1">History</h2>
-          <div class="h-px w-full bg-slate-200"></div>
+          <h2
+            class="font-bold font-md m-1"
+            :style="{ color: theme?.textColor || '#1b1b1c' }"
+          >
+            History
+          </h2>
+          <div class="h-px w-full bg-slate-200" ></div>
         </div>
         <div v-for="(brand, index) in brands" :key="brand.name">
           <Pointstable :data="brand" :key="index" />

@@ -1,5 +1,5 @@
 <template>
-  <header class="bg-amber-500 shadow-md py-4">
+  <header class="shadow-md py-4 bg-white">
     <div
       class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center"
     >
@@ -46,7 +46,7 @@
         <input
           type="text"
           placeholder="Search products..."
-          class="px-4 py-2 bg-gray-100 w-[70%] rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+          class="px-4 py-2 bg-gray-100 w-[70%] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#bg-[#3D3BF3]"
           @input="onSearchInput"
         />
       </div>
@@ -56,7 +56,7 @@
         <!-- Shopping Cart with Cart Count -->
         <div class="relative cursor-pointer" @click="goToCart">
           <img
-            src="../../assets/img/icons/cart-outline.svg"
+            src="../../assets/img/shop/cart.svg"
             alt="Cart"
             class="h-6 w-6"
           />
@@ -71,7 +71,7 @@
 
         <!-- Notifications -->
         <img
-          src="../../assets/img/icons/bell-outline.svg"
+          src="../../assets/img/shop/bell.svg"
           alt="Notifications"
           class="h-6 w-6 cursor-pointer"
         />

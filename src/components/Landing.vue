@@ -87,14 +87,14 @@ const text = ref([
 
         <span
           style="font-family: poppins"
-          class="text-amber-600 self-center text-xl font-extrabold whitespace-nowrap dark:text-white"
+          class="text-red self-center text-xl font-extrabold whitespace-nowrap dark:text-white"
           >Loyalty Linx</span
         >
       </a>
       <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
         <router-link to="/signin">
           <button
-            class="text-amber-600 px-2 text-md font-medium hover:text-amber-700"
+            class="text-red px-2 text-md font-medium hover:text-amber-700"
           >
             Signin
           </button>
@@ -112,7 +112,7 @@ const text = ref([
           <div class="flex justify-center">
             <router-link to="/register">
               <button
-                class="mx-auto px-5 py-2 my-2 text-lg font-medium bg-amber-600 rounded-md text-white hover:bg-amber-700"
+                class="mx-auto px-5 py-2 my-2 text-lg font-medium bg-blue-600 rounded-md text-white hover:bg-blue-700"
               >
                 Join Now
               </button>
@@ -129,7 +129,7 @@ const text = ref([
           <div class="flex justify-center">
             <!-- <router-link to="/register/merchant"> -->
             <button
-              class="mx-auto px-5 py-2 my-2 text-lg font-medium bg-amber-600 rounded-md text-white hover:bg-amber-700"
+              class="mx-auto px-5 py-2 my-2 text-lg font-medium bg-blue-600 rounded-md text-white hover:bg-blue-700"
             >
               Join as Partner Merchant
             </button>

@@ -1,5 +1,5 @@
 <template>
-  <div class="p-5 flex bg-amber-500">
+  <div class="p-5 flex bg-white">
     <div class="flex">
       <svg
         @click="handleBack"
@@ -38,7 +38,9 @@
         </g>
       </svg>
       <div>
-        <h1 class="text-2xl font-semibold mx-6">Shopping Cart</h1>
+        <h1 class="text-2xl text-[#4635B1] font-semibold mx-6">
+          Shopping Cart
+        </h1>
       </div>
     </div>
 

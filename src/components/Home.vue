@@ -5,12 +5,13 @@ import { initTabs } from "flowbite";
 import { initModals } from "flowbite";
 import { defineEmits } from "vue";
 import HomeCarousel from "./HomeCard/HomeCarousel.vue";
+import HomeCarousel2 from "./HomeCard/HomeCarousel2.vue";
 import Services from "./HomeCard/Services.vue";
-import ApplyCreditPath from "../assets/img/home/loan-svgrepo-com.svg";
-import PayCreditsPath from "../assets/img/home/pay-per-click-cursor-svgrepo-com.svg";
-import CovertPointsPath from "../assets/img/home/exchange-svgrepo-com.svg";
-import RedeemPath from "../assets/img/home/gift-svgrepo-com.svg";
-import DiscoverDealsPath from "../assets/img/home/open-box-svgrepo-com.svg";
+import ApplyCreditPath from "../assets/img/credits/download.svg";
+import PayCreditsPath from "../assets/img/credits/payment-icon.svg";
+import CovertPointsPath from "../assets/img/credits/convert.svg";
+import RedeemPath from "../assets/img/credits/redeem.svg";
+import DiscoverDealsPath from "../assets/img/credits/discover.svg";
 import MorePath from "../assets/img/home/more-horizontal-svgrepo-com.svg";
 import HistoryTable from "./HomeCard/HistoryTable.vue";
 import Card from "./HomeCard/Card.vue";
@@ -216,37 +217,57 @@ const getAllMerchant = async (token) => {
 const hideModal = () => {
   showModal.value = false;
 };
+const theme = ref(null);
+if (localStorage.getItem("theme")) {
+  theme.value = JSON.parse(localStorage.getItem("theme"));
+}
+const updateTabColors = () => {
+  if (theme.value) {
+    const root = document.documentElement;
 
+    // Update CSS variables dynamically
+    root.style.setProperty(
+      "--tab-active-bg",
+      theme.value.backgroundColor || "#3D3BF3"
+    );
+    root.style.setProperty(
+      "--tab-inactive-text",
+      theme.value.tabInactiveText || "#AAAAAA"
+    );
+  }
+};
 onMounted(async () => {
   const userStore = useUserStore();
   const token = userStore.token;
   await getAllMerchant(token);
   initTabs();
+  updateTabColors();
   handleGetHistory();
 });
 </script>
 
 <template>
   <div class="container-services">
-    <ul
+    <!-- <ul
       id="homeCard"
       class="bg-white mx-3 pb-6 rounded-sm flex flex-row justify-evenly"
-    >
+    > -->
+    <ul id="homeCard" class="rounded-sm flex flex-row justify-evenly">
       <div
         id="tab-options"
-        class="mb-4 border-b border-gray-200 dark:border-gray-700 w-11/12"
+        class="border-gray-200 dark:border-gray-700 w-11/12"
       >
         <ul
           class="flex flex-wrap flex-row -mb-px text-sm font-medium text-center w-full"
           id="default-styled-tab"
           data-tabs-toggle="#default-styled-tab-content"
-          data-tabs-active-classes="text-amber-600 hover:text-amber-600 dark:text-amber-500 dark:hover:text-amber-500 border-amber-600 dark:border-amber-500"
-          data-tabs-inactive-classes="dark:border-transparent text-amber-500 hover:text-amber-600 dark:text-gray-400 border-gray-100 hover:border-gray-300 dark:border-gray-700 dark:hover:text-gray-300"
+          data-tabs-active-classes="text-white bg-[var(--tab-active-bg)] hover:text-red border-transparent dark:border-[var(--tab-active-bg)]"
+          data-tabs-inactive-classes="dark:border-transparent bg-white text-gray-500 hover:text-red dark:text-gray-400 hover:border-gray-300 dark:border-gray-700 dark:hover:text-gray-300"
           role="tablist"
         >
-          <li class="me-2" role="presentation">
+          <li class="" role="presentation">
             <button
-              class="p-4 border-b-2 rounded-t-lg hover:border-gray-300 dark:hover:text-gray-300"
+              class="p-4 border-b-2 rounded-t-lg m-0 hover:border-gray-300 dark:hover:text-gray-300"
               id="profile-styled-tab"
               data-tabs-target="#styled-profile"
               type="button"
@@ -257,9 +278,9 @@ onMounted(async () => {
               <h2 class="font-bold">Credits</h2>
             </button>
           </li>
-          <li class="me-2" role="presentation">
+          <li class="" role="presentation">
             <button
-              class="p-4 border-b-2 rounded-t-lg hover:border-gray-300 dark:hover:text-gray-300"
+              class="p-4 border-b-2 rounded-t-lg m-0 hover:border-gray-300 dark:hover:text-gray-300"
               id="dashboard-styled-tab"
               data-tabs-target="#styled-dashboard"
               type="button"
@@ -281,7 +302,7 @@ onMounted(async () => {
         >
           <template v-for="balance in balancesCredits" :key="balance.id">
             <div
-              class="mx-auto px-2 justify-center rounded-2xl items-center flex flex-col mt-3"
+              class="mx-auto px-[1.04rem] justify-center rounded-2xl items-center flex flex-col"
             >
               <Card
                 v-for="(balanceItem, index) in balancesCredits"
@@ -305,7 +326,7 @@ onMounted(async () => {
         >
           <template v-for="history in balancesPoints" :key="history.name">
             <div
-              class="mx-auto px-2 justify-center rounded-2xl items-center flex flex-col mt-3"
+              class="mx-auto px-[1.04rem] justify-center items-center flex flex-col"
             >
               <Card
                 v-for="(balancePoint, index) in balancesPoints"
@@ -324,7 +345,7 @@ onMounted(async () => {
       <template v-for="balance in balancesCredits" :key="balance.id">
         <div
           id="container"
-          class="px-2 justify-center rounded-2xl items-center flex flex-col mt-3"
+          class="px-2 justify-center items-center flex flex-col mt-3"
         >
           <Card
             v-for="(balanceItem, index) in balancesCredits"
@@ -363,6 +384,9 @@ onMounted(async () => {
 
     <div class="mx-3">
       <HomeCarousel />
+    </div>
+    <div class="mx-3">
+      <HomeCarousel2 />
     </div>
   </div>
   <div class="h-[4rem]"></div>
@@ -416,6 +440,16 @@ onMounted(async () => {
 </template>
 
 <style>
+:root {
+  --tab-active-bg: #3d3bf3; /* Default active tab background color */
+  --tab-inactive-text: #gray; /* Default inactive tab text color */
+}
+
+.dark {
+  --tab-active-bg: #1a1a2e; /* Active tab background color in dark mode */
+  --tab-inactive-text: #aaaaaa; /* Inactive text color in dark mode */
+}
+
 #default-styled-tab {
   width: 100%;
   justify-content: space-between;

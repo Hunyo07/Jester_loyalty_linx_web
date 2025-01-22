@@ -44,7 +44,7 @@ function deleteAllCookies() {
 <template>
   <nav class="border-gray-200 dark:bg-gray-900">
     <div
-      class="max-w-screen-xl bg-white rounded-3xl flex flex-wrap items-center justify-between mx-auto p-4"
+      class="max-w-screen-xl bg-white flex flex-wrap items-center justify-between mx-auto p-4"
     >
       <a class="flex items-center space-x-3 rtl:space-x-reverse">
         <img
@@ -54,14 +54,14 @@ function deleteAllCookies() {
         />
         <span
           style="font-family: poppins"
-          class="self-center text-2xl font-bold whitespace-nowrap text-gray-700 dark:text-white"
+          class="self-center text-2xl font-bold whitespace-nowrap text-[#4635B1] dark:text-white"
           >{{
             $route.name.charAt(0).toUpperCase() + $route.name.slice(1)
           }}</span
         >
       </a>
       <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-        <DropdownNotification />
+        <!-- <DropdownNotification /> -->
         <DropDownUser :item="userProfileData" />
 
         <!-- <button

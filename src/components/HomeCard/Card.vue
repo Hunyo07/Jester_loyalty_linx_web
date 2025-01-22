@@ -11,6 +11,15 @@ let showModal = ref(false);
 
 const props = defineProps(["item", "index", "history"]);
 
+const theme = ref(null);
+
+onMounted(() => {
+  const storedTheme = localStorage.getItem("theme");
+  if (storedTheme) {
+    theme.value = JSON.parse(storedTheme);
+  }
+});
+
 const historyButton = () => {
   // console.log(props.item);
 };
@@ -26,16 +35,26 @@ const unHideModal = () => {
 
 <template>
   <li
-    class="w-full py-5 pt-6 px-4 bg-gradient-to-r from-amber-200 to-amber-400 border-gray-200 rounded-xl dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
+    class="w-full py-5 pt-6 px-4 rounded-b-lg"
+    :style="{ backgroundColor: theme?.backgroundColor || '#EBEAFF' }"
   >
+    <!-- <li
+  class="w-full py-5 pt-6 px-4 bg-gradient-to-r from-amber-200 to-amber-400 border-gray-200 rounded-xl dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
+  > -->
     <div class="flex flex-row justify-between">
-      <div>
-        <h5
+      <div class="pl-5">
+        <!-- <h5
           class="mb-2 text-2xl font-bold tracking-tight text-amber-800 dark:text-white"
+        > -->
+
+        <h5
+          class="mb-1 text-2xl font-bold tracking-tight text-[#EBEAFF] dark:text-white"
+          :style="{ color: theme?.primary || '#FFFFFF' }"
         >
           {{ item.value }}
         </h5>
-        <p class="font-semibold text-xs text-gray-700 dark:text-gray-400">
+        <!-- <p class="font-semibold text-xs text-gray-700 dark:text-gray-400"> -->
+        <p class="font-semibold text-xs text-gray-300 dark:text-gray-400">
           {{ item.label }}
         </p>
       </div>
@@ -50,8 +69,15 @@ const unHideModal = () => {
         </div>
         <div id="buttonHistory">
           <button class="cursor-pointer mt-2 w-full" @click="unHideModal">
-            <p
+            <!-- <p
               class="flex justify-center bg-amber-700 text-[.8rem] rounded-md text-white px-2 py-1 text-center hover:bg-amber-800"
+            > -->
+            <p
+              class="flex justify-center bg-[#9694FF] text-[.8rem] rounded-md text-[#EBEAFF] px-2 py-1 text-center hover:bg-amber-800"
+              :style="{
+                backgroundColor: theme?.secondaryColor || '#fff',
+                color: theme?.primary || '#fff',
+              }"
             >
               <img
                 class="w-[1rem] mr-1"

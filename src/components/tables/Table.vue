@@ -3,6 +3,10 @@ import { ref, computed } from "vue";
 import Filter from "../FilterComponent/Filter.vue";
 
 const props = defineProps(["data", "index"]);
+const theme = ref(null);
+if (localStorage.getItem("theme")) {
+  theme.value = JSON.parse(localStorage.getItem("theme"));
+}
 </script>
 
 <template>
