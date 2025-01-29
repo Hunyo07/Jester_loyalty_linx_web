@@ -23,10 +23,15 @@ if (localStorage.getItem("theme")) {
           >
             History
           </h2>
-          <div class="h-px w-full bg-slate-200" ></div>
+          <div class="h-px w-full bg-slate-200"></div>
         </div>
-        <div v-for="(brand, index) in brands" :key="brand.name">
-          <Pointstable :data="brand" :key="index" />
+        <div v-if="brands && brands.length">
+          <div v-for="brand in brands" :key="brand.name">
+            <Pointstable :data="brand" />
+          </div>
+        </div>
+        <div class="flex justify-center py-10" v-else>
+          <h1 class="font-bold text-gray-700">No history</h1>
         </div>
       </div>
     </div>

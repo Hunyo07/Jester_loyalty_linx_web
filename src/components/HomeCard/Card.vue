@@ -8,17 +8,16 @@ import Table from "../tables/Table.vue";
 // });
 
 let showModal = ref(false);
-
 const props = defineProps(["item", "index", "history"]);
 
 const theme = ref(null);
+const storedTheme = localStorage.getItem("theme");
+if (storedTheme) {
+  theme.value = JSON.parse(storedTheme);
+}
+// onMounted(() => {
 
-onMounted(() => {
-  const storedTheme = localStorage.getItem("theme");
-  if (storedTheme) {
-    theme.value = JSON.parse(storedTheme);
-  }
-});
+// });
 
 const historyButton = () => {
   // console.log(props.item);
@@ -36,7 +35,7 @@ const unHideModal = () => {
 <template>
   <li
     class="w-full py-5 pt-6 px-4 rounded-b-lg"
-    :style="{ backgroundColor: theme?.backgroundColor || '#EBEAFF' }"
+    :style="{ backgroundColor: theme?.backgroundColor || '#3d3bf3' }"
   >
     <!-- <li
   class="w-full py-5 pt-6 px-4 bg-gradient-to-r from-amber-200 to-amber-400 border-gray-200 rounded-xl dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
@@ -73,10 +72,10 @@ const unHideModal = () => {
               class="flex justify-center bg-amber-700 text-[.8rem] rounded-md text-white px-2 py-1 text-center hover:bg-amber-800"
             > -->
             <p
-              class="flex justify-center bg-[#9694FF] text-[.8rem] rounded-md text-[#EBEAFF] px-2 py-1 text-center hover:bg-amber-800"
+              class="flex justify-center text-[.8rem] rounded-md px-2 py-1 text-center hover:bg-amber-800"
               :style="{
-                backgroundColor: theme?.secondaryColor || '#fff',
-                color: theme?.primary || '#fff',
+                backgroundColor: theme?.secondaryColor || '#9694FF',
+                color: theme?.primary || '#EBEAFF',
               }"
             >
               <img
@@ -133,13 +132,25 @@ const unHideModal = () => {
                     </button>
                   </div>
                   <!-- Modal body -->
-                  <div class="w-full">
+
+                  <div v-if="item && item.length" class="w-full">
                     <div class="overflow-x-auto sm:rounded-lg">
                       <div
                         class="h-[20rem] mb-[12rem] rounded-lg pb-2.5 dark:border-strokedark dark:bg-boxdark xl:pb-1"
                       >
                         <div v-for="(item, index) in history" :key="item.name">
                           <Table :data="item" :key="index" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div v-else class="w-full flex justify-center">
+                    <div class="overflow-x-auto sm:rounded-lg">
+                      <div
+                        class="h-[20rem] mb-[12rem] rounded-lg py-10 pb-2.5 dark:border-strokedark dark:bg-boxdark xl:pb-1"
+                      >
+                        <div>
+                          <h1 class="font-bold text-gray-700">No history</h1>
                         </div>
                       </div>
                     </div>

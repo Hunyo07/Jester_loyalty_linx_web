@@ -8,9 +8,9 @@ const router = useRouter();
 const mobileNo = JSON.parse(sessionStorage.getItem("mobileNo"));
 const userId = JSON.parse(sessionStorage.getItem("userId"));
 const error = ref(null);
-const urlRefreshCode = "http://localhost:5000/api/user/refresh-code";
+const urlRefreshCode = "http://192.168.100.243:5000/api/user/refresh-code";
 
-const validateCode = "http://localhost:5000/api/user/validate-code";
+const validateCode = "http://192.168.100.243:5000/api/user/validate-code";
 
 const handleRefreshCode = async (idUser) => {
   try {

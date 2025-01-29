@@ -14,10 +14,10 @@ const userId = ref("");
 let resendOtpInterval = null;
 const mobileNo = ref("");
 
-const urlSendOtp = "http://localhost:5000/api/user/send-otp";
-const urlVerification = "http://localhost:5000/api/user/validate-login";
-const urlProfile = "http://localhost:5000/api/user/profile";
-const urlRefreshCode = "http://localhost:5000/api/user/refresh-code";
+const urlSendOtp = "http://192.168.100.243:5000/api/user/send-otp";
+const urlVerification = "http://192.168.100.243:5000/api/user/validate-login";
+const urlProfile = "http://192.168.100.243:5000/api/user/profile";
+const urlRefreshCode = "http://192.168.100.243:5000/api/user/refresh-code";
 // onMounted(() => {
 getCookieTokenAsync("u_TOK");
 getCookieMobileAsync("u_NO");

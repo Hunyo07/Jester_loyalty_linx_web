@@ -62,7 +62,7 @@ const hideModal = () => {
 };
 
 const merchantId = merchant?._id;
-const urlCreditRequest = `http://localhost:5000/api/user/${merchantId}/request-credit`;
+const urlCreditRequest = `http://192.168.100.243:5000/api/user/${merchantId}/request-credit`;
 // Computed property to format the credit amount with currency formatting
 
 // Computed property to format the credit amount with currency formatting

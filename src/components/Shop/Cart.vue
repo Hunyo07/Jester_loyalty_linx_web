@@ -257,7 +257,7 @@ export default {
     async loadCart() {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/user/get-item-cart",
+          "http://192.168.100.243:5000/api/user/get-item-cart",
           {
             method: "POST",
             headers: {
@@ -305,7 +305,7 @@ export default {
     async updateQuantity(productId, action, item) {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/user/quantity-item-cart",
+          "http://192.168.100.243:5000/api/user/quantity-item-cart",
           {
             method: "POST",
             headers: {
@@ -414,7 +414,7 @@ export default {
     async removeFromCart(productId) {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/user/delete-item-cart",
+          "http://192.168.100.243:5000/api/user/delete-item-cart",
           {
             method: "POST",
             headers: {

@@ -18,7 +18,7 @@ import MerchantsSelection from "./Credits/MerchantsSelection.vue";
 import { useUserStore } from "../stores/user";
 import Merchants from "./merchants/Merchants.vue";
 import { useRouter } from "vue-router";
-const merchantEndPoint = "http://localhost:5000/api/merchant/get-all";
+const merchantEndPoint = "http://192.168.100.243:5000/api/merchant/get-all";
 const router = useRouter();
 let merchantData = ref([]);
 let isMerchantDataFetched = ref(false); // Flag to track whether merchant data has been fetched

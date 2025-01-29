@@ -3,13 +3,12 @@ import { ref, onMounted } from "vue";
 import { initCarousels } from "flowbite";
 
 const theme = ref(null);
+const storedTheme = localStorage.getItem("theme");
+if (storedTheme) {
+  theme.value = JSON.parse(storedTheme);
+}
 onMounted(() => {
   initCarousels();
-
-  const storedTheme = localStorage.getItem("theme");
-  if (storedTheme) {
-    theme.value = JSON.parse(storedTheme);
-  }
 });
 const carouselImages = ref([
   {

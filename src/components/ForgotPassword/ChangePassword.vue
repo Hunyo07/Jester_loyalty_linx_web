@@ -8,7 +8,7 @@ const confirmPassword = ref("");
 const error = ref(null);
 
 const userId = JSON.parse(sessionStorage.getItem("userId"));
-const apiUrlUpdatePass = "http://localhost:5000/api/user/change-password";
+const apiUrlUpdatePass = "http://192.168.100.243:5000/api/user/change-password";
 
 const handleChangePassword = async () => {
   try {

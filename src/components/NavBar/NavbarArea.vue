@@ -5,6 +5,9 @@ import { useRouter } from "vue-router";
 import { initCollapses } from "flowbite";
 import DropdownNotification from "./DropdownNotification.vue";
 
+const themeData = ref({});
+
+themeData.value = JSON.parse(localStorage.getItem("theme"));
 onMounted(() => {
   initCollapses();
 });
@@ -53,8 +56,11 @@ function deleteAllCookies() {
           alt="Flowbite Logo"
         />
         <span
-          style="font-family: poppins"
-          class="self-center text-2xl font-bold whitespace-nowrap text-[#4635B1] dark:text-white"
+          :style="{
+            fontFamily: `poppins`,
+            color: themeData?.textColor || `#101010`,
+          }"
+          class="self-center text-2xl font-bold whitespace-nowrap text-[#101010] dark:text-white"
           >{{
             $route.name.charAt(0).toUpperCase() + $route.name.slice(1)
           }}</span

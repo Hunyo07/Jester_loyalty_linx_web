@@ -6,9 +6,9 @@ import { useUserStore } from "../../stores/user";
 // import "intl-tel-input/build/css/intlTelInput.css";
 // import intlTelInput from "intl-tel-input";
 
-// const urlLogin = "http://localhost:5000/api/user/login";
-const urlLogin = "http://localhost:5000/api/user/login/mobileNo";
-const urlProfile = "http://localhost:5000/api/user/profile";
+// const urlLogin = "http://192.168.100.243:5000/api/user/login";
+const urlLogin = "http://192.168.100.243:5000/api/user/login/mobileNo";
+const urlProfile = "http://192.168.100.243:5000/api/user/profile";
 
 const email = ref("");
 const mobileNo = ref("");

@@ -4,14 +4,14 @@ import { initCollapses } from "flowbite";
 import { initCarousels } from "flowbite";
 
 const theme = ref(null);
-
-onMounted(() => {
-  initCarousels();
-
-  const storedTheme = localStorage.getItem("theme");
+const storedTheme = localStorage.getItem("theme");
   if (storedTheme) {
     theme.value = JSON.parse(storedTheme);
   }
+onMounted(() => {
+  initCarousels();
+
+ 
 });
 const carouselImages = ref([
   {

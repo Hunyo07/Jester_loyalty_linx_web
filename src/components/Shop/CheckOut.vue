@@ -94,20 +94,23 @@ const handleSubmit = async () => {
   loading.value = true;
   handlePayment();
   try {
-    const response = await fetch("http://localhost:5000/api/order/addOrder", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token.value} `,
-      },
-      body: JSON.stringify({
-        shippingAddress: `${address.value.address} ${address.value.city} ${address.value.province}`,
-        orderAddress: "456 Oak St, Springfield",
-        orderEmail: email.value,
-        orderDetails: itemPlaced.value.item,
-        paymentMethod: getPaymentMethodName(selectedPaymentMethod.value),
-      }),
-    });
+    const response = await fetch(
+      "http://192.168.100.243:5000/api/order/addOrder",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token.value} `,
+        },
+        body: JSON.stringify({
+          shippingAddress: `${address.value.address} ${address.value.city} ${address.value.province}`,
+          orderAddress: "456 Oak St, Springfield",
+          orderEmail: email.value,
+          orderDetails: itemPlaced.value.item,
+          paymentMethod: getPaymentMethodName(selectedPaymentMethod.value),
+        }),
+      }
+    );
     const data = await response.json();
     if (response.ok) {
       Swal.fire({

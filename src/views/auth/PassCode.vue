@@ -14,10 +14,10 @@ const userProfile = ref([]);
 
 userProfile.value = JSON.parse(localStorage.getItem("u_data"));
 
-const loginPasscode = "http://localhost:5000/api/user/passcode";
-const urlProfile = "http://localhost:5000/api/user/profile";
-const urlRefreshCode = "http://localhost:5000/api/user/refresh-code";
-
+const loginPasscode = "http://192.168.100.243:5000/api/user/passcode";
+const urlProfile = "http://192.168.100.243:5000/api/user/profile";
+const urlRefreshCode = "http://192.168.100.243:5000/api/user/refresh-code";
+const themeUrl = "http://192.168.100.243:5000/api/theme/get/active";
 const userStore = useUserStore();
 
 getCookieTokenAsync("u_TOK");
@@ -260,6 +260,16 @@ const handleRefreshCode = async (idUser) => {
     console.log(error);
   }
 };
+const getTheme = async () => {
+  try {
+    const response = await fetch(themeUrl);
+    const themeData = await response.json(); // Replace with your API endpoint
+    data.value = themeData;
+    localStorage.setItem("theme", JSON.stringify(themeData));
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
 const handleSignIn = async () => {
   // console.log(tokenCookie.value);
   try {
@@ -275,6 +285,7 @@ const handleSignIn = async () => {
     });
     const data = await response.json();
     if (response.ok) {
+      getTheme();
       if (!userProfile.value || userProfile.value.length === 0) {
         await getUserProfile(tokenCookie.value);
         // console.log("fetch");

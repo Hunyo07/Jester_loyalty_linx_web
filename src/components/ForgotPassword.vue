@@ -7,7 +7,7 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 const email = ref("");
 const error = ref(null);
-const findAccount = "http://localhost:5000/api/user/find-account";
+const findAccount = "http://192.168.100.243:5000/api/user/find-account";
 
 const iti = ref({});
 

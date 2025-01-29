@@ -6,7 +6,7 @@ import html2canvas from "html2canvas";
 const text = ref("");
 const qrCode = ref(null);
 const token = ref("");
-const refreshQrEndPoint = "http://localhost:5000/api/user/refresh-qr";
+const refreshQrEndPoint = "http://192.168.100.243:5000/api/user/refresh-qr";
 const qrCodeContainer = ref(null);
 
 async function handleSaveQr() {

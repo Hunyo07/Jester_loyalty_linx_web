@@ -50,7 +50,10 @@
 
     <!-- Credit Score Section -->
     <div class="mb-2">
-      <div class="p-3 rounded-sm flex flex-col items-center bg-[#3D3BF3]">
+      <div
+        class="p-3 rounded-sm flex flex-col items-center"
+        :style="{ backgroundColor: themeData?.backgroundColor || `#3D3BF3` }"
+      >
         <!-- <div
         class="p-6 rounded-sm shadow-md"
         :class="['bg-gradient-to-r', 'from-amber-300', 'to-amber-600']"
@@ -70,7 +73,12 @@
     <!-- Scrollable Category Buttons -->
     <div class="p-1 mb-2 rounded-sm">
       <div class="px-2 py-1">
-        <h1 class="text-[#4635B1] font-bold text-lg">CATEGORIES</h1>
+        <h1
+          class="text-[#4635B1] font-bold text-lg"
+          :style="{ color: themeData?.textColor || `#4635B1` }"
+        >
+          CATEGORIES
+        </h1>
       </div>
       <div
         class="overflow-x-auto whitespace-nowrap no-scrollbar flex space-x-2 px-2"
@@ -91,7 +99,8 @@
           v-for="category in tempCategories"
           :key="category._id"
           @click="filterProductsByCategory(category._id)"
-          class="px-4 py-2 border text-[#4635B1] rounded-sm hover:bg-white flex items-center"
+          :style="{ color: themeData?.textColor || `#4635B1` }"
+          class="px-4 py-2 border rounded-sm hover:bg-white flex items-center"
         >
           <div class="flex flex-col w-20">
             <img
@@ -154,7 +163,8 @@
         <!-- Add to Cart button -->
         <button
           @click.stop="addToCart(product)"
-          class="bg-[#4635B1] border text-white px-4 py-2 rounded hover:bg-blue-800 mt-2"
+          class="border text-white px-4 py-2 rounded mt-2"
+          :style="{ backgroundColor: themeData?.backgroundColor || `#4635B1` }"
         >
           <!-- <img
             src="../../assets/img/shop/furniture.svg"
@@ -236,6 +246,7 @@ export default {
       searchQuery: "",
       adImages: ["ad1.jpg", "ad2.jpg", "ad3.jpg", "ad4.jpg"],
       currentSlide: 0,
+      themeData: {},
     };
   },
   async created() {
@@ -259,7 +270,7 @@ export default {
 
     async fetchProducts() {
       try {
-        let url = "http://localhost:5000/api/product/products";
+        let url = "http://192.168.100.243:5000/api/product/products";
         if (this.searchQuery) {
           url += `?searchQuery=${encodeURIComponent(this.searchQuery)}`;
         }
@@ -269,6 +280,7 @@ export default {
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
         this.filteredProducts = this.products;
+        this.themeData = JSON.parse(localStorage.getItem("theme"));
       } catch (error) {
         console.error("Error fetching products:", error);
         Swal.fire({
@@ -284,7 +296,7 @@ export default {
     async fetchCategories() {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/category/getAllCategories"
+          "http://192.168.100.243:5000/api/category/getAllCategories"
         );
         const data = await response.json();
         this.categories = data.allCategories;
@@ -318,7 +330,7 @@ export default {
     async addToCart(product) {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/user/add-to-cart",
+          "http://192.168.100.243:5000/api/user/add-to-cart",
           {
             method: "POST",
             headers: {

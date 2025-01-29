@@ -22,8 +22,8 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 let merchantData = ref([]);
 const historyEndPoint =
-  "http://localhost:5000/api/transactions/get-user-transactions";
-const merchantEndPoint = "http://localhost:5000/api/merchant/get-all";
+  "http://192.168.100.243:5000/api/transactions/get-user-transactions";
+const merchantEndPoint = "http://192.168.100.243:5000/api/merchant/get-all";
 const userData = JSON.parse(localStorage.getItem("u_data"));
 const creditAmount = userData.balance;
 const token = localStorage.getItem("a_TOK");
@@ -31,10 +31,10 @@ const creditsHistory = ref([]);
 const pointsHistory = ref([]);
 const transactionsHistory = ref([]);
 creditsHistory.value = userData.transactionHistory;
-
+const data = ref(null);
 const allowedTransactionTypes = ["credit_applied", "refund", "substract"];
 const allowedTransactionTypesPoints = ["points add", "redeem"];
-
+const themeUrl = "http://192.168.100.243:5000/api/theme/get/active";
 const handleGetHistory = async () => {
   try {
     const response = await fetch(historyEndPoint, {
@@ -221,6 +221,16 @@ const theme = ref(null);
 if (localStorage.getItem("theme")) {
   theme.value = JSON.parse(localStorage.getItem("theme"));
 }
+const getTheme = async () => {
+  try {
+    const response = await fetch(themeUrl);
+    const themeData = await response.json(); // Replace with your API endpoint
+    data.value = themeData;
+    localStorage.setItem("theme", JSON.stringify(themeData));
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
 const updateTabColors = () => {
   if (theme.value) {
     const root = document.documentElement;
@@ -237,6 +247,7 @@ const updateTabColors = () => {
   }
 };
 onMounted(async () => {
+  getTheme();
   const userStore = useUserStore();
   const token = userStore.token;
   await getAllMerchant(token);
