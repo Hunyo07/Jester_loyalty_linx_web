@@ -133,7 +133,8 @@ const unHideModal = () => {
                   </div>
                   <!-- Modal body -->
 
-                  <div v-if="item && item.length" class="w-full">
+                  <!-- <div v-if="item && item.length" class="w-full"> -->
+                  <div  class="w-full">
                     <div class="overflow-x-auto sm:rounded-lg">
                       <div
                         class="h-[20rem] mb-[12rem] rounded-lg pb-2.5 dark:border-strokedark dark:bg-boxdark xl:pb-1"
@@ -144,7 +145,7 @@ const unHideModal = () => {
                       </div>
                     </div>
                   </div>
-                  <div v-else class="w-full flex justify-center">
+                  <!-- <div v-else class="w-full flex justify-center">
                     <div class="overflow-x-auto sm:rounded-lg">
                       <div
                         class="h-[20rem] mb-[12rem] rounded-lg py-10 pb-2.5 dark:border-strokedark dark:bg-boxdark xl:pb-1"
@@ -154,7 +155,7 @@ const unHideModal = () => {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> -->
                   <!-- Modal footer -->
                   <div
                     class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600"

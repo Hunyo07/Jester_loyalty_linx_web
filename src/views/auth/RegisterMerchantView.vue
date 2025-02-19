@@ -23,7 +23,7 @@ let confirmPasswordVisible = ref(false);
 let passwordVisible = ref(false);
 
 const iti = ref({});
-const urlRegister = "http://127.0.0.1:5000/api/merchant/register";
+const urlRegister = "http://192.168.100.243:5000/api/merchant/register";
 
 // ----------------------- START OF COOKIE FUNCTION -----------------------
 

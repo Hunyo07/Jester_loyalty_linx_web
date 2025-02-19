@@ -136,27 +136,36 @@ const shop = () => {
 </script>
 
 <template>
-  <template v-for="balance in balances" :key="balance.id">
-    <div class="scroll-container">
-      <ul class="flex flex-row justify-evenly">
-        <PointsCard
-          v-for="(balanceItem, index) in balance.balanceItems"
-          :key="index"
-          :item="balanceItem"
-          :index="index"
-        />
-      </ul>
-      <div id="services-container ">
-        <Services
-          :services="servicesItem"
-          @serviceClicked="servicesFunctions"
-        />
-        <div class="pb-[6rem]">
-          <PointsHistory :brands="creditsHistory" />
+  <div class="points-container">
+    <template v-for="balance in balances" :key="balance.id">
+      <div class="scroll-container">
+        <!-- Points Card Section -->
+        <div class="max-w-md mx-auto w-full px-4">
+          <ul class="flex flex-row justify-center">
+            <PointsCard
+              v-for="(balanceItem, index) in balance.balanceItems"
+              :key="index"
+              :item="balanceItem"
+              :index="index"
+              class="w-full"
+            />
+          </ul>
+        </div>
+
+        <!-- Services and History Section -->
+        <div class="services-history-container max-w-4xl mx-auto px-4 mt-6">
+          <Services
+            :services="servicesItem"
+            @serviceClicked="servicesFunctions"
+            class="mb-6"
+          />
+          <div class="history-container">
+            <PointsHistory :brands="creditsHistory" />
+          </div>
         </div>
       </div>
-    </div>
-  </template>
+    </template>
+  </div>
 </template>
 
 <style>
@@ -176,15 +185,40 @@ const shop = () => {
 #services-container {
   margin: 0rem 1.1rem;
 }
+.points-container {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.services-history-container {
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.history-container {
+  padding-bottom: 6rem;
+}
+
 @media (min-width: 1100px) {
   .scroll-container {
-    padding: 0rem 10rem;
+    padding: 2rem 8rem;
+  }
+  
+  .services-history-container {
+    padding: 2rem;
   }
 }
 
 @media (max-width: 640px) {
-  #services-container {
-    padding: 0rem;
+  .scroll-container {
+    padding: 1rem;
+  }
+  
+  .services-history-container {
+    padding: 1rem;
+    margin: 0;
   }
 }
 </style>

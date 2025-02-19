@@ -11,13 +11,16 @@ const error = ref(null);
 const tokenCookie = ref(null);
 const userId = ref("");
 const userProfile = ref([]);
-
+const isLoading = ref(false);
 userProfile.value = JSON.parse(localStorage.getItem("u_data"));
 
-const loginPasscode = "http://192.168.100.243:5000/api/user/passcode";
-const urlProfile = "http://192.168.100.243:5000/api/user/profile";
-const urlRefreshCode = "http://192.168.100.243:5000/api/user/refresh-code";
-const themeUrl = "http://192.168.100.243:5000/api/theme/get/active";
+const loginPasscode =
+  "https://loyalty-linxapi-eight.vercel.app/api/user/passcode";
+const urlProfile = "https://loyalty-linxapi-eight.vercel.app/api/user/profile";
+const urlRefreshCode =
+  "https://loyalty-linxapi-eight.vercel.app/api/user/refresh-code";
+const themeUrl =
+  "https://loyalty-linxapi-eight.vercel.app/api/theme/get/active";
 const userStore = useUserStore();
 
 getCookieTokenAsync("u_TOK");
@@ -165,7 +168,6 @@ async function getCookieUserIdAsync(name) {
 
 //     // Attempt to save the cookie
 //     const success = await setCookieAsync(name, userDataString, 7);
-
 //     if (success) {
 //       // console.log("Cookie saved successfully");
 //     }
@@ -173,7 +175,6 @@ async function getCookieUserIdAsync(name) {
 //     console.error("Error saving cookie:", error);
 //   }
 // }
-
 // const userDataString = JSON.stringify(data, (key, value) => {
 //   if (typeof value === 'object' && value !== null) {
 //     return JSON.stringify(value); // recursively serialize nested objects
@@ -272,6 +273,7 @@ const getTheme = async () => {
 };
 const handleSignIn = async () => {
   // console.log(tokenCookie.value);
+  isLoading.value = true;
   try {
     const response = await fetch(loginPasscode, {
       method: "POST",
@@ -288,35 +290,73 @@ const handleSignIn = async () => {
       getTheme();
       if (!userProfile.value || userProfile.value.length === 0) {
         await getUserProfile(tokenCookie.value);
-        // console.log("fetch");
       } else {
-        // await getUserProfile(tokenCookie.value);
         router.push({ name: "home" });
-        // console.log("User profile already fetched");
+        isLoading.value = false;
       }
     } else {
+      isLoading.value = false;
       error.value = data.message;
     }
   } catch (error) {
+    isLoading.value = false;
     console.log(error);
   }
 };
 </script>
 
 <template>
+  <!-- Add this loading overlay at the top of the template -->
+  <div
+    v-if="isLoading"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
+  >
+    <div class="bg-white p-8 rounded-lg shadow-xl flex flex-col items-center">
+      <svg
+        class="animate-spin h-10 w-10 text-[#3D3BF3] mb-4"
+        viewBox="0 0 24 24"
+      >
+        <circle
+          class="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          stroke-width="4"
+        ></circle>
+        <path
+          class="opacity-75"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+        ></path>
+      </svg>
+      <span class="text-gray-700 text-lg font-medium">Verifying Passcode</span>
+      <span class="text-gray-500 text-sm mt-2"
+        >Please wait while we process your request</span
+      >
+    </div>
+  </div>
   <div class="px-4">
     <div class="p-4 mt-10">
-      <div>
-        <div v-if="userProfile">
-          <h1 class="font-semibold px-2 text-gray-800 text-xl">
+      <div class="flex flex-col space-y-2">
+        <div v-if="userProfile" class="flex items-center">
+          <img
+            class="h-8 w-8 rounded-full mr-2"
+            :src="
+              userProfile.profileImage ||
+              '/src/assets/img/authimages/default-avatar.png'
+            "
+            alt="Profile"
+          />
+          <h1 class="font-semibold text-gray-800 text-xl">
             Hi! {{ userProfile.firstName }}
           </h1>
         </div>
-        <div v-else>
-          <div><h1></h1></div>
-        </div>
+        <h1 class="text-gray-800 font-bold text-2xl">Enter your passcode</h1>
+        <p class="text-gray-500 text-sm">
+          Please enter your 6-digit passcode to continue
+        </p>
       </div>
-      <h1 class="text-gray-800 px-2 font-bold text-2xl">Enter your passcode</h1>
     </div>
     <div class="flex flex-col justify-between">
       <form @submit.prevent="handleSignIn">
@@ -326,18 +366,17 @@ const handleSignIn = async () => {
             @update:otp="otpValue = $event"
           ></otpPassocode>
         </div>
-        <div class="flex justify-between">
+        <div class="flex justify-between items-center">
           <div class="px-4 py-5">
-            <p style="font-size: 0.7rem; color: red" v-if="error">
+            <p v-if="error" class="text-red-500 text-sm font-medium">
               {{ error }}
             </p>
           </div>
-          <div class="text-sm px-4 py-5">
+          <div class="text-sm px-2 py-2">
             <router-link to="/forgotpassword">
               <p
                 @click="generateOtpTokens"
-                href="jajvascript:void(0);"
-                class="text-[#4635B1] hover:underline font-semibold cursor-pointer"
+                class="text-[#3D3BF3] text-sm hover:text-[#4635B1] hover:underline font-semibold cursor-pointer transition-colors duration-200"
               >
                 Forgot your passcode?
               </p>
@@ -351,8 +390,27 @@ const handleSignIn = async () => {
                 @click="createPassCode"
                 type="submit"
                 class="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-sm text-white bg-[#3D3BF3] hover:bg-[#4635B1] focus:outline-none focus:border-[#4635B1] focus:shadow-outline-indigo active:bg-[#4635B1] transition duration-150 ease-in-out"
+                :disabled="isLoading"
               >
-                Next
+                <template v-if="isLoading">
+                  <svg class="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
+                    <circle
+                      class="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      stroke-width="4"
+                    ></circle>
+                    <path
+                      class="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Processing...
+                </template>
+                <template v-else> Next </template>
               </button>
             </span>
           </div>
@@ -361,3 +419,17 @@ const handleSignIn = async () => {
     </div>
   </div>
 </template>
+<style scoped>
+.backdrop-blur-sm {
+  backdrop-filter: blur(4px);
+}
+
+button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.hover\:underline:hover {
+  text-decoration: underline;
+}
+</style>

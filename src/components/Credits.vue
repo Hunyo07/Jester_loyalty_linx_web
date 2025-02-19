@@ -27,6 +27,9 @@ const creditsBalance = ref("");
 const limit = ref("");
 const newLimit = ref(0);
 const used = ref("");
+const isLoading = ref(false);
+const error = ref(null);
+
 userProfile.value = JSON.parse(localStorage.getItem("u_data"));
 
 const creditsData = ref([]);
@@ -75,6 +78,8 @@ async function getCookieUserProfileAsync(name) {
 }
 
 const getAllMerchant = async () => {
+  isLoading.value = true;
+
   try {
     const response = await fetch(merchantEndPoint, {
       method: "GET",
@@ -89,10 +94,13 @@ const getAllMerchant = async () => {
       merchantData.value = data.merchants;
     } else {
       const data = await response.json();
-      console.log(data);
+      error.value = "Failed to load merchant data";
     }
   } catch (error) {
-    console.groupEnd(error);
+    console.error(error);
+    error.value = "An error occurred while loading data";
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -241,8 +249,99 @@ const hideModal = () => {
   showModal.value = false;
 };
 </script>
+<style scoped>
+.backdrop-blur-sm {
+  backdrop-filter: blur(4px);
+}
 
+/* Add card animations */
+.card-hover {
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+/* Modal animations */
+.modal-enter-active,
+.modal-leave-active {
+  transition: all 0.3s ease;
+}
+
+.modal-enter-from,
+.modal-leave-to {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+/* Custom scrollbar */
+.scrollbar-width-thin {
+  scrollbar-width: thin;
+  scrollbar-color: #3d3bf3 #f1f1f1;
+}
+
+.scrollbar-width-thin::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-width-thin::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.scrollbar-width-thin::-webkit-scrollbar-thumb {
+  background: #3d3bf3;
+  border-radius: 3px;
+}
+
+/* Responsive padding */
+@media (min-width: 768px) {
+  .container-credits {
+    padding: 2rem;
+  }
+}
+</style>
 <template>
+  <!-- Add loading overlay -->
+  <div
+    v-if="isLoading"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
+  >
+    <div class="bg-white p-8 rounded-lg shadow-xl flex flex-col items-center">
+      <svg
+        class="animate-spin h-10 w-10 text-[#3D3BF3] mb-4"
+        viewBox="0 0 24 24"
+      >
+        <circle
+          class="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          stroke-width="4"
+        ></circle>
+        <path
+          class="opacity-75"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+        ></path>
+      </svg>
+      <span class="text-gray-700 text-lg font-medium"
+        >Loading credits data...</span
+      >
+    </div>
+  </div>
+
+  <!-- Add error message -->
+  <div v-if="error" class="mx-4 mb-4">
+    <div
+      class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+    >
+      <span class="block sm:inline">{{ error }}</span>
+    </div>
+  </div>
   <template v-for="balance in balances" :key="balance.id">
     <ul class="flex flex-row justify-evenly">
       <PointsCard

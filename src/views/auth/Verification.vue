@@ -9,15 +9,16 @@ import { useRoute } from "vue-router";
 const route = useRouter();
 const tokenCookie = ref(null);
 const otpValue = ref("");
-const resendOtpTimer = ref(300); // 5 minutes timer
+const resendOtpTimer = ref(60); // 5 minutes timer
 const userId = ref("");
 let resendOtpInterval = null;
 const mobileNo = ref("");
-
+const isLoading = ref(false);
 const urlSendOtp = "http://192.168.100.243:5000/api/user/send-otp";
 const urlVerification = "http://192.168.100.243:5000/api/user/validate-login";
 const urlProfile = "http://192.168.100.243:5000/api/user/profile";
 const urlRefreshCode = "http://192.168.100.243:5000/api/user/refresh-code";
+
 // onMounted(() => {
 getCookieTokenAsync("u_TOK");
 getCookieMobileAsync("u_NO");
@@ -106,8 +107,9 @@ async function getCookieMobileAsync(name) {
     const cookieValue = await getCookieAsync(name);
     if (cookieValue) {
       // const mobileNos = JSON.parse(decodeURIComponent(cookieValue));
-      mobileNo.value = JSON.parse(decodeURIComponent(cookieValue));
+      // mobileNo.value = JSON.parse(decodeURIComponent(cookieValue));
       // console.log(mobileNos);
+      mobileNo.value = JSON.parse(localStorage.getItem("mobileNo"));
       console.log(" Mobile value:");
       console.log(mobileNo.value);
     } else {
@@ -122,7 +124,8 @@ async function getCookieUserIdAsync(name) {
   try {
     const cookieValue = await getCookieAsync(name);
     if (cookieValue) {
-      userId.value = JSON.parse(decodeURIComponent(cookieValue));
+      // userId.value = JSON.parse(decodeURIComponent(cookieValue));
+      userId.value = JSON.parse(localStorage.getItem("userId"));
       console.log("UseId value:");
     } else {
       console.log("Mobile not found");
@@ -164,14 +167,17 @@ const startResendOtpTimer = () => {
 
 //Handle resend otp
 const resendOtp = async (e) => {
-  // API call to resend OTP
-  // console.log("Resend OTP");
-  getCookieMobileAsync("u_NO");
-  refreshCode();
-  startResendOtpTimer();
-  resendOtpTimer.value = 300;
-
-  // storeTimer(); // reset timer
+  isLoading.value = true; // Add this line
+  try {
+    getCookieMobileAsync("u_NO");
+    await refreshCode();
+    startResendOtpTimer();
+    resendOtpTimer.value = 60;
+  } catch (error) {
+    console.error("Error resending OTP:", error);
+  } finally {
+    isLoading.value = false; // Add this line
+  }
 };
 
 //Handle refresh otp
@@ -275,7 +281,7 @@ const handleRefreshCode = async (idUser) => {
 
 //verification account
 const verify = async (e) => {
-  // e.preventDefault();
+  isLoading.value = true; // Add this line
   try {
     const response = await fetch(urlVerification, {
       method: "POST",
@@ -287,16 +293,14 @@ const verify = async (e) => {
         userId: userId.value,
       }),
     });
-    console.log(otpValue.value);
     const data = await response.json();
     if (response.ok) {
-      console.log("Go in home");
+      route.push({ name: "link/passcode" });
       handleRefreshCode(userId.value);
       saveUserData(data.token, "u_TOK");
-      route.push({ name: "link/passcode" });
-      // console.log(data);
-      // getUserProfile(tokenCookie.value);
+      isLoading.value = false;
     } else {
+      console.log(data.message);
       Swal.fire({
         title: "Authentication failed",
         text: "Invalid code",
@@ -331,18 +335,57 @@ startResendOtpTimer();
 </script>
 
 <template>
-  <div class="sm:mx-auto sm:w-full sm:max-w-md my-40">
-    <!-- <img
-      class="mx-auto h-20 w-auto"
-      src="/src/assets/img/authimages/loyaltilinx-web-favicon.png"
-      alt="Workflow"
-    /> -->
+  <!-- Add this loading overlay -->
+  <!-- Replace the existing loading overlay with this one -->
+  <div
+    v-if="isLoading"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
+  >
+    <div class="bg-white p-8 rounded-lg shadow-xl flex flex-col items-center">
+      <svg class="animate-spin h-10 w-10 text-red mb-4" viewBox="0 0 24 24">
+        <circle
+          class="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          stroke-width="4"
+        ></circle>
+        <path
+          class="opacity-75"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+        ></path>
+      </svg>
+      <span class="text-gray-700 text-lg font-medium">Verifying OTP</span>
+      <span class="text-gray-500 text-sm mt-2"
+        >Please wait while we process your request</span
+      >
+    </div>
+  </div>
+  <!-- Existing content -->
+  <div class="sm:mx-auto sm:w-full sm:max-w-md my-20">
+    <div class="flex justify-center mb-8">
+      <img
+        class="m-1 h-12 w-auto"
+        src="/src/assets/img/authimages/loyaltilinx-web-favicon.png"
+        alt="Loyalty Linx"
+      />
+      <span
+        class="text-red self-center text-3xl font-extrabold whitespace-nowrap"
+      >
+        Loyalty Linx
+      </span>
+    </div>
     <h2
       class="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900"
     >
       Enter the OTP
     </h2>
-    <p class="text-center">sent to {{ mobileNo }}</p>
+    <p class="mt-2 text-center text-gray-600">
+      We've sent a verification code to
+      <span class="font-medium">{{ mobileNo }}</span>
+    </p>
   </div>
   <form action="">
     <div class="flex flex-col justify-center">
@@ -351,14 +394,14 @@ startResendOtpTimer();
       <div class="!mt-8 flex justify-center">
         <button
           v-if="resendOtpTimer > 0"
-          class="w-1/5 m-2 py-3 px-4 text-sm tracking-wide rounded-lg text-gray-500 font-medium focus:outline-none"
+          class="w-48 m-2 py-3 px-4 text-sm tracking-wide rounded-lg text-gray-500 bg-gray-100 font-medium focus:outline-none transition-all duration-200"
           disabled
         >
-          Resend OTP ({{ resendOtpTimer }})
+          Resend OTP ({{ resendOtpTimer }}s)
         </button>
         <button
           v-else
-          class="w-1/5 m-2 py-3 px-4 text-sm tracking-wide rounded-lg text-gray-600 font-semibold focus:outline-none"
+          class="w-48 m-2 py-3 px-4 text-sm tracking-wide rounded-lg text-white bg-red hover:bg-rose-700 font-semibold focus:outline-none transition-all duration-200"
           @click="resendOtp"
         >
           Resend OTP
@@ -376,3 +419,17 @@ startResendOtpTimer();
     </div>
   </form>
 </template>
+<style scoped>
+.backdrop-blur-sm {
+  backdrop-filter: blur(4px);
+}
+
+button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.bg-red {
+  background-color: #ef4444;
+}
+</style>

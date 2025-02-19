@@ -36,6 +36,8 @@ const isDigitsFull = function () {
   return true;
 };
 
+
+
 const handleKeyDown = function (event, index) {
   if (
     event.key !== "Tab" &&

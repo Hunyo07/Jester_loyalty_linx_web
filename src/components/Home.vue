@@ -35,7 +35,12 @@ const data = ref(null);
 const allowedTransactionTypes = ["credit_applied", "refund", "substract"];
 const allowedTransactionTypesPoints = ["points add", "redeem"];
 const themeUrl = "http://192.168.100.243:5000/api/theme/get/active";
+const isLoading = ref(false);
+const error = ref(null);
+
 const handleGetHistory = async () => {
+  isLoading.value = true;
+
   try {
     const response = await fetch(historyEndPoint, {
       method: "GET",
@@ -57,7 +62,10 @@ const handleGetHistory = async () => {
       pointsHistory.value = pointsHistroyData;
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    error.value = "An error occurred while loading data";
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -166,7 +174,7 @@ const applyCredit = () => {
 
 const payCredits = () => {
   // Code for paying credits
-  router.push({ name: "selection/payment" });
+  router.push({ name: "payment" });
   console.log("Paying credits...");
 };
 
@@ -258,6 +266,45 @@ onMounted(async () => {
 </script>
 
 <template>
+  <!-- Add this at the top of template -->
+  <div
+    v-if="isLoading"
+    class="fixed inset-0 z-[60] flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
+  >
+    <div class="bg-white p-8 rounded-lg shadow-xl flex flex-col items-center">
+      <svg
+        class="animate-spin h-10 w-10 text-[var(--tab-active-bg)] mb-4"
+        viewBox="0 0 24 24"
+      >
+        <circle
+          class="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          stroke-width="4"
+        ></circle>
+        <path
+          class="opacity-75"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+        ></path>
+      </svg>
+      <span class="text-gray-700 text-lg font-medium"
+        >Loading your dashboard...</span
+      >
+    </div>
+  </div>
+
+  <!-- Add error message -->
+  <div v-if="error" class="mx-3 mb-4">
+    <div
+      class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+    >
+      <span class="block sm:inline">{{ error }}</span>
+    </div>
+  </div>
+
   <div class="container-services">
     <!-- <ul
       id="homeCard"
@@ -266,7 +313,7 @@ onMounted(async () => {
     <ul id="homeCard" class="rounded-sm flex flex-row justify-evenly">
       <div
         id="tab-options"
-        class="border-gray-200 dark:border-gray-700 w-11/12"
+        class="border-gray-200 dark:border-gray-700 w-full max-w-md mx-auto"
       >
         <ul
           class="flex flex-wrap flex-row -mb-px text-sm font-medium text-center w-full"
@@ -276,9 +323,9 @@ onMounted(async () => {
           data-tabs-inactive-classes="dark:border-transparent bg-white text-gray-500 hover:text-red dark:text-gray-400 hover:border-gray-300 dark:border-gray-700 dark:hover:text-gray-300"
           role="tablist"
         >
-          <li class="" role="presentation">
+          <li class="w-1/2" role="presentation">
             <button
-              class="p-4 border-b-2 rounded-t-lg m-0 hover:border-gray-300 dark:hover:text-gray-300"
+              class="w-full p-4 border-b-2 rounded-t-lg m-0 hover:border-gray-300 dark:hover:text-gray-300"
               id="profile-styled-tab"
               data-tabs-target="#styled-profile"
               type="button"
@@ -289,9 +336,9 @@ onMounted(async () => {
               <h2 class="font-bold">Credits</h2>
             </button>
           </li>
-          <li class="" role="presentation">
+          <li class="w-1/2" role="presentation">
             <button
-              class="p-4 border-b-2 rounded-t-lg m-0 hover:border-gray-300 dark:hover:text-gray-300"
+              class="w-full p-4 border-b-2 rounded-t-lg m-0 hover:border-gray-300 dark:hover:text-gray-300"
               id="dashboard-styled-tab"
               data-tabs-target="#styled-dashboard"
               type="button"
@@ -304,7 +351,7 @@ onMounted(async () => {
           </li>
         </ul>
       </div>
-      <div id="tab-contents" class="w-full">
+      <div id="tab-contents" class="w-full max-w-md mx-auto">
         <div
           class="hidden dark:bg-gray-800"
           id="styled-profile"
@@ -313,7 +360,7 @@ onMounted(async () => {
         >
           <template v-for="balance in balancesCredits" :key="balance.id">
             <div
-              class="mx-auto px-[1.04rem] justify-center rounded-2xl items-center flex flex-col"
+              class="mx-auto justify-center rounded-2xl items-center flex flex-col"
             >
               <Card
                 v-for="(balanceItem, index) in balancesCredits"
@@ -336,9 +383,7 @@ onMounted(async () => {
           aria-labelledby="dashboard-tab"
         >
           <template v-for="history in balancesPoints" :key="history.name">
-            <div
-              class="mx-auto px-[1.04rem] justify-center items-center flex flex-col"
-            >
+            <div class="mx-auto justify-center items-center flex flex-col">
               <Card
                 v-for="(balancePoint, index) in balancesPoints"
                 :key="index"
@@ -510,5 +555,92 @@ onMounted(async () => {
   #tab-contents {
     display: none;
   }
+}
+/* Add smooth transitions */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* Improve tab styling */
+#default-styled-tab button {
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+#default-styled-tab button::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--tab-active-bg);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+#default-styled-tab button:hover::after {
+  width: 100%;
+}
+
+/* Add card hover effects */
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+/* Improve modal animation */
+.modal-enter-active,
+.modal-leave-active {
+  transition: all 0.3s ease;
+}
+
+.modal-enter-from,
+.modal-leave-to {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+/* Update responsive styles */
+@media (max-width: 690px) {
+  .container-services {
+    padding: 1rem;
+  }
+
+  #homeCard {
+    margin: 0;
+    padding: 0;
+  }
+}
+
+/* Add custom scrollbar */
+.scrollbar-width-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--tab-active-bg) #f1f1f1;
+}
+
+.scrollbar-width-thin::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-width-thin::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.scrollbar-width-thin::-webkit-scrollbar-thumb {
+  background: var(--tab-active-bg);
+  border-radius: 3px;
 }
 </style>

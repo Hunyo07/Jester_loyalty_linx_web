@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import Table from "../tables/Table.vue";
 const props = defineProps(["history"]);
+
 </script>
 
 <template>
